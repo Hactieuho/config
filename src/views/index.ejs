@@ -1,0 +1,7 @@
+<h2>Current configs:</h2>
+<p><%= JSON.stringify(config) %></p>
+<form action="/" method="post">
+    <label for="config">Edit config:</label><br><br>
+    <input type="text" id="config" name="config" value="<%= JSON.stringify(config) %>"><br><br>
+    <input type="submit" value="Submit">
+</form>
