@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
     const _config = JSON.parse(req.body.config);
-    console.log(`Set config: ${_config}`);
+    console.log(`Set config: ${req.body.config}`);
     config = _config;
     res.render('index',
         {config: config});
@@ -28,7 +28,7 @@ app.post('/', (req, res) => {
 app.post('/config', (req, res) => {
     console.log(req.body);
     if (config.hasOwnProperty(req.body.id)) {
-        res.send(config);
+        res.send(config[`${req.body.id}`]);
     } else {
         res.send(req.body);
     }
