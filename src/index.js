@@ -1,8 +1,12 @@
-const express = require('express')
-const path = require('path')
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import bodyParser from 'body-parser';
+import { v4 as uuidv4 } from 'uuid';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express()
 const port = 3000
-const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.json());
@@ -18,9 +22,21 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-    const _config = JSON.parse(req.body.config);
-    console.log(`Set config: ${req.body.config}`);
-    config = _config;
+    const _body = JSON.parse(req.body);
+    console.log(`Set config: ${req.body}`);
+    // config = _config;
+    res.render('index',
+        {config: config});
+});
+
+app.get('/add_config', (req, res) => {
+    const id = uuidv4();
+    res.render('add_config',
+        {id: id});
+});
+
+
+app.post('/add_config', (req, res) => {
     res.render('index',
         {config: config});
 });

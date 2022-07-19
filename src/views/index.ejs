@@ -1,7 +1,12 @@
 <h2>Current configs:</h2>
 <p><%= JSON.stringify(config) %></p>
 <form action="/" method="post">
-    <label for="config">Edit config:</label><br><br>
-    <input type="text" id="config" name="config" value="<%= JSON.stringify(config) %>"><br><br>
+    <label>Edit config:</label><br><br>
+    <% for(var key in config) { %>
+        <label for="config_id_<%= key %>"><%= key %></label><br><br>
+        <textarea id="config_id_<%= key %>" name="config_id_<%= key %>" rows="20" cols="100"><%= config[key] %></textarea><br><br>
+    <% } %>
     <input type="submit" value="Submit">
 </form>
+
+<a href="/add_config">Add config</a>
