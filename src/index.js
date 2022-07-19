@@ -35,8 +35,10 @@ app.get('/add_config', (req, res) => {
         {id: id});
 });
 
-
 app.post('/add_config', (req, res) => {
+    const _body = req.body;
+    console.log(`Add config: ${JSON.stringify(req.body)}`);
+    config[_body.id] = _body.config;
     res.render('index',
         {config: config});
 });
