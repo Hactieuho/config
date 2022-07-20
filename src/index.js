@@ -1,7 +1,6 @@
 import express from 'express';
 import path from 'path';
 import {fileURLToPath} from 'url';
-import bodyParser from 'body-parser';
 import {v4 as uuidv4} from 'uuid';
 import fs from 'fs';
 
@@ -10,10 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express()
 const port = 3000
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -28,7 +25,7 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
     config = req.body;
     saveConfigToFile();
-    console.log(`Set config: ${req.body}`);
+    console.log(`Set config: ${JSON.stringify(req.body)}`);
     res.redirect('/');
 });
 
@@ -70,7 +67,7 @@ app.post('/config', (req, res) => {
 
 // Delete config
 app.post('/delete_config', (req, res) => {
-    console.log(`Deleting config: ${req.body}`);
+    console.log(`Deleting config: ${JSON.stringify(req.body)}`);
     if (config.hasOwnProperty(req.body.id)) {
         delete config[`${req.body.id}`];
     }
@@ -105,6 +102,6 @@ function readConfigFromFile() {
 function saveConfigToFile() {
     fs.writeFile(CONFIG_FILE_PATH, JSON.stringify(config), function (err) {
         if (err) return console.log(err);
-        console.log(`Config > ${CONFIG_FILE_PATH}`);
+        console.log(`Save config > ${CONFIG_FILE_PATH}`);
     });
 }
