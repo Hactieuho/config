@@ -1,8 +1,11 @@
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import {fileURLToPath} from 'url';
 import bodyParser from 'body-parser';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
+import fs from 'fs';
+
+const CONFIG_FILE_PATH = 'config.cfg';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express()
@@ -25,8 +28,7 @@ app.post('/', (req, res) => {
     const _body = JSON.parse(req.body);
     console.log(`Set config: ${req.body}`);
     // config = _config;
-    res.render('index',
-        {config: config});
+    res.redirect('/');
 });
 
 app.get('/add_config', (req, res) => {
@@ -39,8 +41,8 @@ app.post('/add_config', (req, res) => {
     const _body = req.body;
     console.log(`Add config: ${JSON.stringify(req.body)}`);
     config[_body.id] = _body.config;
-    res.render('index',
-        {config: config});
+    saveConfigToFile();
+    res.redirect('/');
 });
 
 app.post('/config', (req, res) => {
@@ -52,6 +54,42 @@ app.post('/config', (req, res) => {
     }
 });
 
+app.post('/delete_config', (req, res) => {
+    console.log(`Deleting config: ${req.body}`);
+    if (config.hasOwnProperty(req.body.id)) {
+        delete config[`${req.body.id}`];
+    }
+    saveConfigToFile();
+    res.redirect('/');
+});
+
 app.listen(port, () => {
     console.log(`Config app listening on port ${port}`);
+    // Load config
+    console.log(`Loading config`);
+    readConfigFromFile();
 })
+
+function readConfigFromFile() {
+    fs.readFile(CONFIG_FILE_PATH, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        console.log(`Config file: ${data}`);
+        try {
+            config = JSON.parse(data);
+            console.log(`Set default config success`);
+        } catch (e) {
+            console.error(e, e.stack);
+            console.log(`Set default config error`);
+        }
+    });
+}
+
+function saveConfigToFile() {
+    fs.writeFile(CONFIG_FILE_PATH, JSON.stringify(config), function (err) {
+        if (err) return console.log(err);
+        console.log(`Config > ${CONFIG_FILE_PATH}`);
+    });
+}
