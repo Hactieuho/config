@@ -24,10 +24,11 @@ app.get('/', (req, res) => {
         {config: config});
 });
 
+// Edit configs
 app.post('/', (req, res) => {
-    const _body = JSON.parse(req.body);
+    config = req.body;
+    saveConfigToFile();
     console.log(`Set config: ${req.body}`);
-    // config = _config;
     res.redirect('/');
 });
 
@@ -37,6 +38,7 @@ app.get('/add_config', (req, res) => {
         {id: id});
 });
 
+// Add config
 app.post('/add_config', (req, res) => {
     const _body = req.body;
     console.log(`Add config: ${JSON.stringify(req.body)}`);
@@ -45,15 +47,22 @@ app.post('/add_config', (req, res) => {
     res.redirect('/');
 });
 
+// Test config
 app.post('/config', (req, res) => {
     console.log(req.body);
     if (config.hasOwnProperty(req.body.id)) {
-        res.send(config[`${req.body.id}`]);
+        try {
+            const json = JSON.parse(config[`${req.body.id}`]);
+            res.json(json);
+        } catch (e) {
+            res.json({"error": "Config is not JSON"});
+        }
     } else {
-        res.send(req.body);
+        res.send({"error": "Config not found"});
     }
 });
 
+// Delete config
 app.post('/delete_config', (req, res) => {
     console.log(`Deleting config: ${req.body}`);
     if (config.hasOwnProperty(req.body.id)) {

@@ -1,4 +1,29 @@
 <script>
+    function testConfig(id) {
+        // Test config
+        console.log(`Testing config ${id}`);
+        const url = "/config";
+        const data = {
+            "id": id
+        };
+        const other_params = {
+            headers: {"content-type": "application/json; charset=UTF-8"},
+            body: JSON.stringify(data),
+            method: "POST",
+            mode: "cors"
+        };
+        fetch(url, other_params)
+            .then(response => response.json())
+            .then(function (json) {
+                const str = JSON.stringify(json);
+                alert(str);
+                console.log(str);
+            })
+            .catch(function (error) {
+                console.log(`Test config ${id} error: ${error}`);
+            });
+    }
+
     function deleteConfig(id) {
         if (confirm(`Are you sure to delete config ${id}?`)) {
             // Delete config
@@ -31,7 +56,6 @@
             console.log(`Cancel delete config ${id}`);
         }
     }
-
 </script>
 
 <h2>Current configs:</h2>
@@ -39,9 +63,10 @@
 <form action="/" method="post">
     <label>Edit config:</label><br><br>
     <% for(var key in config) { %>
-        <label for="config_id_<%= key %>"><%= key %></label>&emsp;
-        <button type="button" onclick="deleteConfig(`<%= key %>` )">Delete config</button><br><br>
-        <textarea id="config_id_<%= key %>" name="config_id_<%= key %>" rows="20"
+        <label for="<%= key %>"><%= key %></label>&emsp;
+        <button type="button" onclick="deleteConfig(`<%= key %>` )">Delete config</button>&emsp;
+        <button type="button" onclick="testConfig(`<%= key %>` )">Test config</button><br><br>
+        <textarea id="<%= key %>" name="<%= key %>" rows="20"
                   cols="100"><%= config[key] %></textarea><br><br>
     <% } %>
     <input type="submit" value="Submit">
