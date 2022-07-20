@@ -41,10 +41,16 @@ app.get('/add_config', (req, res) => {
 // Add config
 app.post('/add_config', (req, res) => {
     const _body = req.body;
-    console.log(`Add config: ${JSON.stringify(req.body)}`);
-    config[_body.id] = _body.config;
-    saveConfigToFile();
-    res.redirect('/');
+    try {
+        console.log(`Add config: ${JSON.stringify(_body)}`);
+        // Test json config
+        JSON.parse(_body.config);
+        config[_body.id] = _body.config;
+        saveConfigToFile();
+        res.redirect('/');
+    } catch (e) {
+        res.send("Config is not JSON");
+    }
 });
 
 // Test config
