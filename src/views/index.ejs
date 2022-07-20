@@ -60,6 +60,7 @@
 
 <h2>Current configs:</h2>
 <p><%= JSON.stringify(config) %></p>
+<p>Post request to /config with body {"id": "config_id"} to test</p>
 <form action="/" method="post">
     <label>Edit config:</label><br><br>
     <% for(var key in config) { %>
