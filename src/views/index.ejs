@@ -1,6 +1,11 @@
 <script>
-    function testConfig(id) {
-        // Test config
+    function testGetConfig(id) {
+        // Test get config
+        window.open(`/config/${id}`, '_blank');
+    }
+
+    function testPostConfig(id) {
+        // Test post config
         console.log(`Testing config ${id}`);
         const url = "/config";
         const data = {
@@ -60,14 +65,16 @@
 
 <h2>Current configs:</h2>
 <p><%= JSON.stringify(config) %></p>
+<p>Get request to /config/:id to test</p>
 <p>Post request to /config with body {"id": "config_id"} to test</p>
 <form action="/" method="post">
     <label>Edit config:</label><br><br>
     <% for(var key in config) { %>
         <label for="<%= key %>"><%= key %></label>&emsp;
         <button type="button" onclick="deleteConfig(`<%= key %>` )">Delete config</button>&emsp;
-        <button type="button" onclick="testConfig(`<%= key %>` )">Test config</button><br><br>
-        <textarea id="<%= key %>" name="<%= key %>" rows="20"
+        <button type="button" onclick="testGetConfig(`<%= key %>` )">Test get config</button>&emsp;
+        <button type="button" onclick="testPostConfig(`<%= key %>` )">Test post config</button><br><br>
+        <textarea id="<%= key %>" name="<%= key %>" rows="10"
                   cols="100"><%= config[key] %></textarea><br><br>
     <% } %>
     <input type="submit" value="Submit">

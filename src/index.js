@@ -8,7 +8,7 @@ const CONFIG_FILE_PATH = 'config.cfg';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express()
-const port = 3000
+const port = 3001
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
@@ -51,6 +51,19 @@ app.post('/add_config', (req, res) => {
 });
 
 // Test config
+app.get('/config/:id', (req, res) => {
+    console.log(req.body);
+    if (config.hasOwnProperty(req.params.id)) {
+        try {
+            const json = JSON.parse(config[`${req.params.id}`]);
+            res.json(json);
+        } catch (e) {
+            res.json({"error": "Config is not JSON"});
+        }
+    } else {
+        res.send({"error": "Config not found"});
+    }
+});
 app.post('/config', (req, res) => {
     console.log(req.body);
     if (config.hasOwnProperty(req.body.id)) {
