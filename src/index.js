@@ -88,8 +88,8 @@ app.post('/delete_config', (req, res) => {
     res.redirect('/');
 });
 
-app.listen(port, () => {
-    console.log(`Config app listening on port ${port}`);
+app.listen(process.env.PORT || port, () => {
+    console.log(`Config app listening on port ${process.env.PORT || port}`);
     // Load config
     console.log(`Loading config`);
     readConfigFromFile();
