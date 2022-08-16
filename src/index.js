@@ -8,7 +8,7 @@ const CONFIG_FILE_PATH = 'config.cfg';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express()
-const port = 3001
+const port = process.env.PORT || 3001
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
@@ -88,8 +88,8 @@ app.post('/delete_config', (req, res) => {
     res.redirect('/');
 });
 
-app.listen(process.env.PORT || port, () => {
-    console.log(`Config app listening on port ${process.env.PORT || port}`);
+app.listen(port, () => {
+    console.log(`Config app listening on port ${port}`);
     // Load config
     console.log(`Loading config`);
     readConfigFromFile();
